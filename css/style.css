@@ -1,0 +1,51 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald:300,400);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 300;
+  color: #2C3E50;
+}
+
+#title {
+  margin: 30px auto;
+}
+#title h1 {
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
+
+#chart-container {
+  margin: 30px auto;
+  text-align: center;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #2C3E50;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 0.8em;
+}
+
+.tooltip {
+  position: absolute;
+  max-width: 200px;
+  height: auto;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 4px 4px 15px #000;
+  pointer-events: none;
+}
+
+.bigger-text {
+  font-size: 1.2em;
+  font-weight: 400;
+}
+
+h6 {
+  text-align: center;
+}
