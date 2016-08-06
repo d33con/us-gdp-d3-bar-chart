@@ -1,20 +1,12 @@
-var w = 1000;
-var h = 600;
-var chartPadding = 100;
-var innerPadding = chartPadding + 1;
+// calculate margins according to window size on load
+var margin = {top: 60, right: 60, bottom: 60, left: 60},
+  w = parseInt(d3.select("#chart-container").style("width")),
+  w = w - margin.left - margin.right,
+  chartRatio = 0.7,
+  h = w * chartRatio;
+
 
 function drawBarChart(dataset) {
-
-  /* get max & min data values
-  var minXValue = d3.min(d, function(ds) {
-    return ds[0];
-  });
-  var maxXValue = d3.max(d, function(ds) {
-    return ds[0];
-  });
-  var maxYValue = d3.max(dataset, function(ds) {
-    return ds[1];
-  });*/
   
   // get the first year in the dataset
   var minDate = dataset[0][0].substr(0,4);
@@ -23,8 +15,6 @@ function drawBarChart(dataset) {
   // get the most recent year in the dataset
   var maxDate = dataset[dataset.length - 1][0].substr(0,4);
   maxDate = new Date(maxDate);
-  //console.log(minDate, maxDate);
-
   
   // x-axis scale
   var xScale = d3.time.scale()
@@ -34,47 +24,22 @@ function drawBarChart(dataset) {
   // y-axis scale
   var yScale = d3.scale.linear()
                         .domain([0, d3.max(dataset, function(d) { return d[1]; })])
-                        .range([h, 5]);
+                        .range([h, 0]);
   
   
-  // x-axis draw function
+  // draw x-axis
   var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
   
-  // y-axis draw function
+  // draw y-axis
   var yAxis = d3.svg.axis().scale(yScale).orient("left");
   
   // svg space position and size
   var svg = d3.select("#d3bar")
-  .append("svg")
-  .attr("width", w + (chartPadding * 2))
-  .attr("height", h + chartPadding / 2);
-  
-  // draw x-axis
-  svg.append("g").call(xAxis)
-                .attr("class", "axis")
-                .attr("transform", "translate(" + chartPadding + ", " + h + ")");
-  
-  // x-axis label
-  svg.append("text")
-      .attr("transform", "translate(" + (w + chartPadding * 2) / 2 + ", " + (h + chartPadding / 2) + ")")
-      .attr("class", "bigger-text")
-      .style("text-anchor", "middle")
-      .text("Year");
-  
-  // draw y-axis
-  svg.append("g").call(yAxis)
-                .attr("class", "axis")
-                .attr("transform", "translate(" + chartPadding + ", 0)");
-  
-  // y-axis label
-  svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 + (chartPadding / 4))
-        .attr("x", 0 - (h / 2))
-        .attr("dy", "1em")
-        .attr("class", "bigger-text")
-        .style("text-anchor", "middle")
-        .text("Value ($billion)");
+      .append("svg")
+      .attr("width", w + margin.left + margin.right)
+      .attr("height", h + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
   //tooltip
   var tooltip = d3.select("#d3bar").append("div")
@@ -87,14 +52,15 @@ function drawBarChart(dataset) {
     .enter()
     .append("rect")
     .attr({
-      x: function(d, i) { return innerPadding + (i * (w / dataset.length)); },
+      x: function(d, i) { return margin.left + (i * (w / dataset.length)); },
       y: function(d) { return yScale(d[1]); },
       width: (w / dataset.length),
-      height: function(d) { return h - yScale(d[1]) - 1; },
+      height: function(d) { return h - yScale(d[1]); },
       fill: "#3F51B5"
     })
     .on("mouseover", function(d) {
-    
+      
+      // format dates
       var date = new Date(d[0]);
       var formatDate = d3.time.format("%B %Y");
     
@@ -110,6 +76,33 @@ function drawBarChart(dataset) {
              .duration(300)
              .style("opacity", 0);
     });
+  
+  // draw x-axis
+  svg.append("g").call(xAxis)
+                .attr("class", "axis")
+                .attr("transform", "translate(" + margin.left + "," + h + ")");
+  
+  // x-axis label
+  svg.append("text")
+      .attr("transform", "translate(" + (margin.left + (w / 2)) + ", " + (h + (margin.bottom * 0.75)) + ")")
+      .attr("class", "bigger-text")
+      .style("text-anchor", "middle")
+      .text("Year");
+  
+  // draw y-axis
+  svg.append("g").call(yAxis)
+                .attr("class", "axis")
+                .attr("transform", "translate(" + margin.left + ", 0)");
+  
+  // y-axis label
+  svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left / 2)
+        .attr("x", 0 - (h / 2))
+        .attr("dy", "1em")
+        .attr("class", "bigger-text")
+        .style("text-anchor", "middle")
+        .text("Value ($billion)");
 }
 
 
@@ -117,17 +110,18 @@ function drawBarChart(dataset) {
 d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json", function(error, data) {
 
   if (error) {
-    console.log('error');
-  } else {
-    //console.log(data.data);
+    console.log("error");
   }
    
   var dataset = data.data;
   drawBarChart(dataset);
   
+  // footer small print
   var updated = data.updated_at.substr(0, 10);
   
-  d3.select("#d3bar").append("text")
-      .html("<h6>" + data.description + " Last updated: " + updated + "</h6>")
+  d3.select("#footer").append("div")
+      .attr("x", margin.left + margin.right + (w / 2))
+      .attr("y", h)
+      .html("<h6>" + data.description + "</h6><h6> Last updated: " + updated + "</h6>");
 
 });

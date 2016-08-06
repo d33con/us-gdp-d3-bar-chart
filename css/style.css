@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Oswald:300,400);
-@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400);
 body {
   font-family: "Roboto Condensed", sans-serif;
   font-weight: 300;
@@ -14,11 +14,6 @@ body {
   text-align: center;
 }
 
-#chart-container {
-  margin: 30px auto;
-  text-align: center;
-}
-
 .axis path,
 .axis line {
   fill: none;
@@ -28,6 +23,12 @@ body {
 
 .axis text {
   font-size: 0.8em;
+}
+
+.bigger-text {
+  font-size: 1.2em;
+  font-weight: 400;
+  text-align: center;
 }
 
 .tooltip {
@@ -41,11 +42,6 @@ body {
   pointer-events: none;
 }
 
-.bigger-text {
-  font-size: 1.2em;
-  font-weight: 400;
-}
-
-h6 {
-  text-align: center;
+#footer {
+  text-align: right;
 }

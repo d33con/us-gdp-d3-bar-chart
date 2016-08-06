@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Oswald:300,400)
-@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300)
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400)
 
 body
   font-family: 'Roboto Condensed', sans-serif
@@ -11,10 +11,6 @@ body
   h1
     font-family: 'Oswald', sans-serif
     text-align: center
-    
-#chart-container
-  margin: 30px auto
-  text-align: center
 
 .axis path,
 .axis line 
@@ -22,9 +18,13 @@ body
   stroke: #2C3E50
   shape-rendering: crispEdges
 
-
 .axis text 
-  font-size: 0.8em
+  font-size: .8em
+    
+.bigger-text
+  font-size: 1.2em
+  font-weight: 400
+  text-align: center
   
 .tooltip
   position: absolute
@@ -35,10 +35,6 @@ body
   border-radius: 5px
   box-shadow: 4px 4px 15px #000
   pointer-events: none
-
-.bigger-text
-  font-size: 1.2em
-  font-weight: 400
   
-h6
-  text-align: center
+#footer
+  text-align: right
