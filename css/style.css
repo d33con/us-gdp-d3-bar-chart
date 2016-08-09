@@ -40,8 +40,9 @@ body {
   border-radius: 5px;
   box-shadow: 4px 4px 15px #000;
   pointer-events: none;
+  text-align: center;
 }
 
 #footer {
-  text-align: right;
+  text-align: center;
 }

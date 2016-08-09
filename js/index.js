@@ -1,21 +1,21 @@
 // calculate margins according to window size on load
-var margin = {top: 60, right: 60, bottom: 60, left: 60},
+var margin = {top: 60, right: 60, bottom: 60, left: 40},
   w = parseInt(d3.select("#chart-container").style("width")),
   w = w - margin.left - margin.right,
-  chartRatio = 0.5,
+  chartRatio = 0.7,
   h = w * chartRatio;
 
 
 function drawBarChart(dataset) {
-
+  
   // get the first year in the dataset
   var minDate = dataset[0][0].substr(0,4);
   minDate = new Date(minDate);
-
+  
   // get the most recent year in the dataset
   var maxDate = dataset[dataset.length - 1][0].substr(0,4);
   maxDate = new Date(maxDate);
-
+  
   // x-axis scale
   var xScale = d3.time.scale()
                         .domain([minDate, maxDate])
@@ -25,24 +25,24 @@ function drawBarChart(dataset) {
   var yScale = d3.scale.linear()
                         .domain([0, d3.max(dataset, function(d) { return d[1]; })])
                         .range([h, 0]);
-
-
+  
+  
   // draw x-axis
   var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-
+  
   // draw y-axis
   var yAxis = d3.svg.axis().scale(yScale).orient("left");
-
+  
   // svg space position and size
-  var svg = d3.select("#d3bar")
+  var svg = d3.select("#chart-container")
       .append("svg")
       .attr("width", w + margin.left + margin.right)
       .attr("height", h + margin.top + margin.bottom)
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+  
   //tooltip
-  var tooltip = d3.select("#d3bar").append("div")
+  var tooltip = d3.select("#chart-container").append("div")
                   .attr("class", "tooltip")
                   .style("opacity", 0);
 
@@ -59,11 +59,11 @@ function drawBarChart(dataset) {
       fill: "#3F51B5"
     })
     .on("mouseover", function(d) {
-
+      
       // format dates
       var date = new Date(d[0]);
       var formatDate = d3.time.format("%B %Y");
-
+    
       tooltip.transition()
               .duration(300)
               .style("opacity", 0.90)
@@ -76,28 +76,28 @@ function drawBarChart(dataset) {
              .duration(300)
              .style("opacity", 0);
     });
-
+  
   // draw x-axis
   svg.append("g").call(xAxis)
                 .attr("class", "axis")
                 .attr("transform", "translate(" + margin.left + "," + h + ")");
-
+  
   // x-axis label
   svg.append("text")
       .attr("transform", "translate(" + (margin.left + (w / 2)) + ", " + (h + (margin.bottom * 0.75)) + ")")
       .attr("class", "bigger-text")
       .style("text-anchor", "middle")
       .text("Year");
-
+  
   // draw y-axis
   svg.append("g").call(yAxis)
                 .attr("class", "axis")
                 .attr("transform", "translate(" + margin.left + ", 0)");
-
+  
   // y-axis label
   svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left / 2)
+        .attr("y", 0 - margin.left)
         .attr("x", 0 - (h / 2))
         .attr("dy", "1em")
         .attr("class", "bigger-text")
@@ -112,14 +112,15 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
   if (error) {
     console.log("error");
   }
-
+   
   var dataset = data.data;
   drawBarChart(dataset);
-
+  
   // footer small print
   var updated = data.updated_at.substr(0, 10);
-
-  d3.select("#footer").append("div")
+  
+  d3.select("#chart-container").append("div")
+      .attr('id', 'footer')
       .attr("x", margin.left + margin.right + (w / 2))
       .attr("y", h)
       .html("<h6>" + data.description + "</h6><h6> Last updated: " + updated + "</h6>");
