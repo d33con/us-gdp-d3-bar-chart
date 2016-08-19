@@ -2,7 +2,7 @@
 var margin = {top: 60, right: 60, bottom: 60, left: 40},
   w = parseInt(d3.select("#chart-container").style("width")),
   w = w - margin.left - margin.right,
-  chartRatio = 0.7,
+  chartRatio = 0.4,
   h = w * chartRatio;
 
 
